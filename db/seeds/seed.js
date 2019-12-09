@@ -7,12 +7,20 @@ const {
 
 const { formatDates, formatComments, makeRefObj } = require('../utils/utils');
 
-exports.seed = function(knex) {
-  const topicsInsertions = knex('topics').insert(topicData);
-  const usersInsertions = knex('users').insert(userData);
-
-  return Promise.all([topicsInsertions, usersInsertions])
+exports.seed = function (knex) {
+  return knex.migrate
+    .rollback()
+    .then(() => knex.migrate.latest())
     .then(() => {
+      const topicsInsertions = knex('topics').insert(topicData);
+      const usersInsertions = knex('users').insert(userData);
+      return Promise.all([topicsInsertions, usersInsertions])
+    })
+
+    .then(() => {
+      const formattedArticleData = formatDates(articleData);
+      const articleInsertions = knex('articles').insert(formattedArticleData);
+      return articleInsertions;
       /* 
       
       Your article data is currently in the incorrect format and will violate your SQL schema. 
