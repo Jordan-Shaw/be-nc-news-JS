@@ -60,7 +60,7 @@ describe('formatDates', () => {
 })
 
 const inputArr = [{ article_id: 1, title: 'A' }];
-const complexInput = [
+const exemplarArticles = [
   {
     title: 'Living in the shadow of a great man',
     topic: 'mitch',
@@ -88,12 +88,11 @@ const complexInput = [
     article_id: 3
   },
   {
-    title: 'Student SUES Mitch!',
+    title: "They're not exactly dogs, are they?",
     topic: 'mitch',
-    author: 'rogersop',
-    body:
-      'We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages',
-    created_at: 1163852514171,
+    author: 'butter_bridge',
+    body: 'Well? Think about it.',
+    created_at: 533132514171,
     article_id: 4
   }];
 
@@ -111,14 +110,95 @@ describe('makeRefObj', () => {
     expect(makeRefObjOutput.A).to.equal(1);
   })
   it('Should perform correctly with multiple large objects', () => {
-    const complexOutput = makeRefObj(complexInput);
+    const complexOutput = makeRefObj(exemplarArticles);
     expect(complexOutput).to.deep.equal({
       'Living in the shadow of a great man': 1,
       'Sony Vaio; or, The Laptop': 2,
       'Eight pug gifs that remind me of mitch': 3,
-      'Student SUES Mitch!': 4
+      "They're not exactly dogs, are they?": 4
     })
   })
 });
 
-describe('formatComments', () => { });
+const exemplarRefObj = makeRefObj(exemplarArticles);
+const exemplarComments = [{
+  body:
+    "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+  belongs_to: "They're not exactly dogs, are they?",
+  created_by: 'butter_bridge',
+  votes: 16,
+  created_at: 1511354163389,
+},
+{
+  body:
+    'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+  belongs_to: 'Living in the shadow of a great man',
+  created_by: 'butter_bridge',
+  votes: 14,
+  created_at: 1479818163389,
+},
+{
+  body:
+    'Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.',
+  belongs_to: 'Living in the shadow of a great man',
+  created_by: 'icellusedkars',
+  votes: 100,
+  created_at: 1448282163389,
+}];
+
+const commentsOutput = formatComments(exemplarComments, exemplarRefObj);
+
+describe('formatComments', () => {
+  it('Should return an array', () => {
+    expect(commentsOutput).to.be.an('Array');
+  })
+  it('Should be an array of objects', () => {
+    expect(commentsOutput[0]).to.an('object');
+  })
+  it('Should be an entirely new array with entirely new objects', () => {
+    expect(commentsOutput).to.not.equal(exemplarComments);
+    expect(exemplarComments).to.eql([{
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      belongs_to: "They're not exactly dogs, are they?",
+      created_by: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
+    },
+    {
+      body:
+        'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'butter_bridge',
+      votes: 14,
+      created_at: 1479818163389,
+    },
+    {
+      body:
+        'Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'icellusedkars',
+      votes: 100,
+      created_at: 1448282163389,
+    }]);
+    expect(commentsOutput[0]).to.not.equal(exemplarComments[0]);
+    expect(exemplarComments[0]).to.eql({
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      belongs_to: "They're not exactly dogs, are they?",
+      created_by: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
+    })
+  })
+  it('created_by should be renamed to author and belongs_to should be renamed to article_id in each object', () => {
+    expect(commentsOutput[0]).to.have.keys('author', 'article_id', 'body', 'created_at', 'votes');
+    expect(commentsOutput[0]).to.not.have.keys('created_by', 'belongs_to');
+  })
+  it('The created_at value should be converted into a javascript date object', () => {
+    expect(commentsOutput[0].created_at instanceof Date).to.equal(true);
+  })
+  it('value of the new article_id key must be the corresponding id to the original title value provided.', () => {
+    expect(commentsOutput[0].article_id).to.equal(4)
+  });
+});
