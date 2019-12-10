@@ -20,7 +20,7 @@ exports.updateArticle = (article_id, updateData) => {
   // console.log('Made it to the updateArticle model...')
   const { inc_votes } = updateData
 
-  if (!inc_votes) {
+  if (!inc_votes || Object.keys(updateData).length > 1) {
     return Promise.reject({ status: 400 })
   }
 

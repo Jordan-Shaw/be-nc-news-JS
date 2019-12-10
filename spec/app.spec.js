@@ -103,6 +103,15 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid number of votes to add');
           })
       });
+      it('/:article_id PATCH:400 Returns \'Invalid properties in \n\t request\' when passed extra arguments other than inc_votes in \n\t the request body', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ inc_votes: "320", name: "Jordan" })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid properties in request')
+          });
+      });
     });
   });
 });
