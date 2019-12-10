@@ -12,4 +12,6 @@ exports.fetchByArticleId = (article_id) => {
       }
       return article;
     })
+  // .catch((err) =>
+  //   console.log(err))
 }

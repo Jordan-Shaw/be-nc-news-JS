@@ -65,6 +65,14 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Article does not exist');
           })
       })
+      it('/:article_id GET:400 Returns \'Bad request\' when passed \n\t an invalid article_id', () => {
+        return request(app)
+          .get('/api/articles/The_Thiefs_Journal')
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid ID');
+          })
+      })
     });
   });
 });
