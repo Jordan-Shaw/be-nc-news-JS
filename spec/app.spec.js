@@ -18,6 +18,7 @@ describe('app', () => {
           .get('/api/topics')
           .expect(200)
           .then(response => {
+            // console.log(response.body)
             expect(response.body.topics).to.be.an('Array');
             const { topics } = response.body
             expect(topics[0]).to.have.keys('slug', 'description');
@@ -31,6 +32,7 @@ describe('app', () => {
           .get('/api/users/butter_bridge')
           .expect(200)
           .then(response => {
+            // console.log(response.body);
             expect(response.body.user).to.be.an('Object');
             const { user } = response.body;
             expect(user).to.have.keys('username', 'avatar_url', 'name');
@@ -71,6 +73,25 @@ describe('app', () => {
           .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal('Invalid ID');
+          });
+      });
+      it('/:article_id PATCH:200 Successfully patches specified \n\tarticle when provided data in the correct format', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ inc_votes: 320 })
+          .expect(200)
+          .then(response => {
+            expect(response.body.article).to.be.an('Object');
+            expect(response.body.article.votes).to.equal(420);
+          })
+      });
+      it.only('/:article_id PATCH:400 Returns \'Number of votes to add \n\tnot passed\' when passed no inc_votes on request body', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({})
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Number of votes to add not passed');
           })
       })
     });

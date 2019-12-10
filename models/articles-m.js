@@ -15,3 +15,21 @@ exports.fetchArticle = (article_id) => {
   // .catch((err) =>
   //   console.log(err))
 }
+
+exports.updateArticle = (article_id, updateData) => {
+  // console.log('Made it to the updateArticle model...')
+  const { inc_votes } = updateData
+  if (!inc_votes) {
+    return Promise.reject({ status: 400 })
+  }
+
+  return knextion('articles')
+    .where('article_id', '=', article_id)
+    .returning('*')
+    .increment('votes', inc_votes)
+    .then(response => {
+      const article = { article: response[0] };
+      return article;
+    })
+
+}
