@@ -19,8 +19,9 @@ describe('app', () => {
           .expect(200)
           .then(response => {
             expect(response.body.topics).to.be.an('Array');
-            expect(response.body.topics[0]).to.have.keys('slug', 'description');
-            expect(response.body.topics.length).to.equal(3);
+            const { topics } = response.body
+            expect(topics[0]).to.have.keys('slug', 'description');
+            expect(topics.length).to.equal(3);
           })
       });
     });
@@ -30,6 +31,7 @@ describe('app', () => {
           .get('/api/users/butter_bridge')
           .expect(200)
           .then(response => {
+            expect(response.body.user).to.be.an('Object');
             const { user } = response.body;
             expect(user).to.have.keys('username', 'avatar_url', 'name');
             expect(user.name).to.equal('jonny');
@@ -43,6 +45,18 @@ describe('app', () => {
             expect(response.body.msg).to.equal('User does not exist');
           })
       })
+    });
+    describe('/articles', () => {
+      it('/:article_id GET:200 Returns the specified article', () => {
+        return request(app)
+          .get('/api/articles/1')
+          .expect(200)
+          .then(response => {
+            expect(response.body.article).to.be.an('Object');
+            const { article } = response.body;
+            expect(article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at')
+          })
+      });
     });
   });
 });
