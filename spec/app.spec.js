@@ -17,9 +17,22 @@ describe('app', () => {
         return request(app)
           .get('/api/topics')
           .expect(200)
-          .then(response => {
-            const topics = response.body;
+          .then(responseObj => {
+            const topics = responseObj.body;
             expect(topics[0]).to.have.keys('slug', 'description');
+            expect(topics.length).to.equal(3);
+          })
+      });
+    });
+    describe('/users', () => {
+      it('/:username GET:200 Returns the specified user', () => {
+        return request(app)
+          .get('/api/users/butter_bridge')
+          .expect(200)
+          .then(responseObj => {
+            const user = responseObj.body[0];
+            expect(user).to.have.keys('username', 'avatar_url', 'name');
+            expect(user.name).to.equal('jonny');
           })
       });
     });
