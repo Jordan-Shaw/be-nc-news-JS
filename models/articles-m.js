@@ -19,6 +19,7 @@ exports.fetchArticle = (article_id) => {
 exports.updateArticle = (article_id, updateData) => {
   // console.log('Made it to the updateArticle model...')
   const { inc_votes } = updateData
+
   if (!inc_votes) {
     return Promise.reject({ status: 400 })
   }

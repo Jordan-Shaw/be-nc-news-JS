@@ -67,7 +67,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Article does not exist');
           })
       })
-      it('/:article_id GET:400 Returns \'Bad request\' when passed \n\t an invalid article_id', () => {
+      it('/:article_id GET:400 Returns \'Invalid ID\' when passed \n\t an invalid article_id', () => {
         return request(app)
           .get('/api/articles/The_Thiefs_Journal')
           .expect(400)
@@ -85,7 +85,7 @@ describe('app', () => {
             expect(response.body.article.votes).to.equal(420);
           })
       });
-      it.only('/:article_id PATCH:400 Returns \'Number of votes to add \n\tnot passed\' when passed no inc_votes on request body', () => {
+      it('/:article_id PATCH:400 Returns \'Number of votes to add \n\tnot passed\' when passed no inc_votes on request body', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({})
@@ -93,7 +93,16 @@ describe('app', () => {
           .then(response => {
             expect(response.body.msg).to.equal('Number of votes to add not passed');
           })
-      })
+      });
+      it('/:article_id PATCH:400 Returns \'Invalid number of votes to add \n\t\' when passed invalid value for inc_votes on request body \n\t e.g. {inc_votes: \'cats\'}', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ inc_votes: "cats" })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid number of votes to add');
+          })
+      });
     });
   });
 });
