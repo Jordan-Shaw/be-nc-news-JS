@@ -37,7 +37,7 @@ describe('app', () => {
             expect(user.name).to.equal('jonny');
           })
       });
-      it('/:username GET:404 Returns \'User does not exist\' when passed\n\t\t\t a username not found in the database', () => {
+      it('/:username GET:404 Returns \'User does not exist\' when passed\n\t a valid username not found in the database', () => {
         return request(app)
           .get('/api/users/Jean_Genet')
           .expect(404)
@@ -57,6 +57,14 @@ describe('app', () => {
             expect(article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at')
           })
       });
+      it('/:article_id GET:404 Returns \'Article does not exist\' when passed \n\t a valid article_id not found in the database', () => {
+        return request(app)
+          .get('/api/articles/9999')
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal('Article does not exist');
+          })
+      })
     });
   });
 });

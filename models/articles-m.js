@@ -5,7 +5,11 @@ exports.fetchByArticleId = (article_id) => {
   return knextion('articles')
     .select('*')
     .where('article_id', '=', article_id)
-    .then(article => {
-      return { article: article[0] };
+    .then(response => {
+      const article = { article: response[0] };
+      if (!article.article) {
+        return Promise.reject({ status: 404, msg: 'Article does not exist' })
+      }
+      return article;
     })
 }
