@@ -5,7 +5,7 @@ exports.getByUsername = (req, res, next) => {
   const { username } = req.params;
   fetchByUsername(username)
     .then(user => {
-      res.status(200).send(user);
+      res.status(200).send(user)
     })
     .catch((err) => {
       next(err);

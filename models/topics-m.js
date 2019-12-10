@@ -4,4 +4,7 @@ exports.fetchTopics = () => {
   // console.log('reached the fetchTopics model')
   return knextion('topics')
     .select('*')
+    .then(topics => {
+      return { topics };
+    })
 }
