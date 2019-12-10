@@ -1,6 +1,6 @@
 const knextion = require('../db/connection.js')
 
-exports.fetchByArticleId = (article_id) => {
+exports.fetchArticle = (article_id) => {
   // console.log('Made it to fetchArticleById...')
   return knextion('articles')
     .select('*')
