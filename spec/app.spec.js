@@ -67,12 +67,12 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Article does not exist');
           });
       });
-      it('/:article_id GET:400 Returns \'Invalid ID\' when passed \n\t an invalid article_id', () => {
+      it('/:article_id GET:400 Returns \'Invalid ID provided\' when passed \n\t an invalid article_id', () => {
         return request(app)
           .get('/api/articles/The_Thiefs_Journal')
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Invalid Article ID');
+            expect(response.body.msg).to.equal('Invalid ID provided');
           });
       });
       it('/:article_id PATCH:200 Successfully patches specified \n\tarticle when provided data in the correct format', () => {
@@ -130,13 +130,13 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Article does not exist');
           });
       });
-      it('/:article_id PATCH:400 Returns \'Invalid ID\' when passed \n\t an invalid article_id', () => {
+      it('/:article_id PATCH:400 Returns \'Invalid ID provided\' when passed \n\t an invalid article_id', () => {
         return request(app)
           .patch('/api/articles/The_Thiefs_Journal')
           .send({ inc_votes: 1000 })
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Invalid Article ID');
+            expect(response.body.msg).to.equal('Invalid ID provided');
           });
       });
       it('/:article_id/comments GET:200 Returns all of the \n\t comments for a given article', () => {
@@ -149,12 +149,12 @@ describe('app', () => {
             expect(comments[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body')
           })
       });
-      it('/:article_id/comments GET:400 Returns \'Invalid ID\' when \n\t passed an invalid article_id to fetch comments for', () => {
+      it('/:article_id/comments GET:400 Returns \'Invalid ID provided\' when \n\t passed an invalid article_id to fetch comments for', () => {
         return request(app)
           .get('/api/articles/The_Thiefs_Journal/comments')
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Invalid Article ID');
+            expect(response.body.msg).to.equal('Invalid ID provided');
           });
       });
       it('/:article_id/comments GET:404 Returns \'Article does not \n\t exist\' when passed a valid article_id not \n\t found in the database', () => {
@@ -277,7 +277,7 @@ describe('app', () => {
           .send({ inc_votes: 404 })
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Invalid comment ID');
+            expect(response.body.msg).to.equal('Invalid ID provided');
           });
       })
     });
