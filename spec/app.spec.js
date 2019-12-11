@@ -72,7 +72,7 @@ describe('app', () => {
           .get('/api/articles/The_Thiefs_Journal')
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Invalid ID');
+            expect(response.body.msg).to.equal('Invalid Article ID');
           });
       });
       it('/:article_id PATCH:200 Successfully patches specified \n\tarticle when provided data in the correct format', () => {
