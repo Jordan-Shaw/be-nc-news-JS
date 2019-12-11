@@ -90,8 +90,11 @@ exports.addComment = (article_id, comment) => {
 
 exports.fetchArticles = () => {
   return knextion
-    .select('*')
+    .select('articles.*')
     .from('articles')
+    .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
+    .count('comment_id', { as: 'comment_count' })
+    .groupBy('articles.article_id')
     .then(articles => {
       articles = { articles: articles };
       return articles;

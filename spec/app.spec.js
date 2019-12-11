@@ -121,6 +121,15 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid properties in request')
           });
       });
+      it.only('/:article_id PATCH:404 Returns \'Article does not exist\' \n\t when passed incorrect article_id', () => {
+        return request(app)
+          .patch('/api/articles/9999')
+          .send({ inc_votes: 1000 })
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal('Article does not exist');
+          })
+      })
       it('/:article_id/comments GET:200 Returns all of the \n\t comments for a given article', () => {
         return request(app)
           .get('/api/articles/1/comments')
@@ -208,7 +217,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Incorrect username provided')
           });
       });
-      it.only('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
+      it('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
         return request(app)
           .get('/api/articles/')
           .expect(200)
