@@ -128,8 +128,17 @@ describe('app', () => {
           .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Article does not exist');
-          })
-      })
+          });
+      });
+      it('/:article_id PATCH:400 Returns \'Invalid ID\' when passed \n\t an invalid article_id', () => {
+        return request(app)
+          .patch('/api/articles/The_Thiefs_Journal')
+          .send({ inc_votes: 1000 })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid Article ID');
+          });
+      });
       it('/:article_id/comments GET:200 Returns all of the \n\t comments for a given article', () => {
         return request(app)
           .get('/api/articles/1/comments')
@@ -224,8 +233,8 @@ describe('app', () => {
           .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Article does not exist');
-          })
-      })
+          });
+      });
       it('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
         return request(app)
           .get('/api/articles/')
@@ -253,8 +262,14 @@ describe('app', () => {
             expect(comment.votes).to.equal(420);
           });
       });
-      xit('/:comment_id PATCH:404 Returns \'Comment does not exist\' \n\t when passed incorrect comment_id', () => {
+      it('/:comment_id PATCH:404 Returns \'Comment does not exist\' \n\t when passed incorrect comment_id', () => {
         return request(app)
+          .patch('/api/comments/9999')
+          .send({ inc_votes: 404 })
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal('Comment does not exist');
+          })
       })
     });
   });

@@ -8,8 +8,13 @@ exports.updateComment = (comment_id, updateData) => {
     .increment('votes', inc_votes)
     .returning('*')
     .then(response => {
-      response = { comment: response[0] };
-      delete response.comment.article_id;
-      return response;
+      if (response.length === 0) {
+        return Promise.reject({ status: 404, msg: "Comment does not exist" });
+      } else {
+        response = { comment: response[0] };
+        delete response.comment.article_id;
+        return response;
+      }
+
     })
 }
