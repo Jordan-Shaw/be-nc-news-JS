@@ -20,6 +20,11 @@ app.use((err, req, res, next) => {
 
 // PSQL error handler
 app.use((err, req, res, next) => {
+  const sliceIndex = err.detail.indexOf(')');
+  err.problem = err.detail.slice(5, sliceIndex);
+
+  console.log(err);
+
   const psqlErrors = {
     "22P02": "Invalid Article ID",
     "23503": {

@@ -38,3 +38,9 @@ exports.formatComments = (comments, articleRef) => {
   })
   return editedComments;
 };
+
+exports.errorDetialSlicer = (err) => {
+  const sliceIndex = err.detail.indexOf(')');
+  err.problem = err.detail.slice(5, sliceIndex);
+  return err;
+}

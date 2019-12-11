@@ -269,7 +269,16 @@ describe('app', () => {
           .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Comment does not exist');
-          })
+          });
+      });
+      it('/:comment_id PATCH:400 Returns \'Invalid comment ID\' \n\t when passed invalid comment_id', () => {
+        return request(app)
+          .patch('/api/comments/The_Thiefs_Journal')
+          .send({ inc_votes: 404 })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid comment ID');
+          });
       })
     });
   });

@@ -3,6 +3,7 @@ const {
   formatDates,
   makeRefObj,
   formatComments,
+  errorDetialSlicer
 } = require('../db/utils/utils');
 
 let articleData = require('../db/data/test-data/articles.js');
@@ -201,4 +202,37 @@ describe('formatComments', () => {
   it('value of the new article_id key must be the corresponding id to the original title value provided.', () => {
     expect(commentsOutput[0].article_id).to.equal(4)
   });
+});
+
+let exemplarError = {
+  name: 'error',
+  length: 275,
+  severity: 'ERROR',
+  code: '23503',
+  detail: 'Key (article_id)=(9999) is not present in table "articles".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'comments',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'comments_article_id_foreign',
+  file: 'ri_triggers.c',
+  line: '2474',
+  routine: 'ri_ReportViolation',
+  problem: 'article_id'
+};
+
+describe('errorDetailSlicer()', () => {
+  it('Should set a new property on an error called \'problem\'', () => {
+    const updatedError = errorDetialSlicer(exemplarError);
+    expect(updatedError).to.have.property('problem');
+  });
+  it('Should set the value of that property to what is contained within the first set of parentheses in the err.detail property', () => {
+    const updatedError = errorDetialSlicer(exemplarError);
+    expect(updatedError.problem).to.equal('article_id');
+  })
 });
