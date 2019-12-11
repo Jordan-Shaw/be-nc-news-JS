@@ -65,8 +65,8 @@ describe('app', () => {
           .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Article does not exist');
-          })
-      })
+          });
+      });
       it('/:article_id GET:400 Returns \'Invalid ID\' when passed \n\t an invalid article_id', () => {
         return request(app)
           .get('/api/articles/The_Thiefs_Journal')
@@ -130,9 +130,25 @@ describe('app', () => {
             const { comments } = response.body;
             expect(comments[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body')
           })
+      });
+      it('/:article_id/comments GET:400 Returns \'Invalid ID\' when \n\t passed an invalid article_id to fetch comments for', () => {
+        return request(app)
+          .get('/api/articles/The_Thiefs_Journal/comments')
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid Article ID');
+          });
+      });
+      xit('/:article_id/comments GET:404 Returns \'Article does not \n\t exist\' when passed a valid article_id not \n\t found in the database', () => {
+        return request(app)
+          .get('/api/articles/9999/comments')
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal('Article does not exist');
+          })
       })
     });
-    describe('/comments', () => {
+    xdescribe('/comments', () => {
       it('', () => {
 
       });

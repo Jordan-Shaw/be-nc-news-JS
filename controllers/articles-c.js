@@ -1,7 +1,7 @@
 const { fetchArticle, updateArticle, fetchArticleComments } = require('../models/articles-m.js')
 
 exports.getArticle = (req, res, next) => {
-  // console.log('Made it to getByArticleId...');
+  // console.log('Made it to getArticle...');
   const { article_id } = req.params;
 
   fetchArticle(article_id)
@@ -14,7 +14,7 @@ exports.getArticle = (req, res, next) => {
 }
 
 exports.patchArticle = (req, res, next) => {
-  // console.log("Made it to the patch article controller")
+  // console.log("Made it to the patchArticle controller")
   const { article_id } = req.params;
   const updateData = req.body;
 
@@ -28,6 +28,7 @@ exports.patchArticle = (req, res, next) => {
 }
 
 exports.getArticleComments = (req, res, next) => {
+  // console.log('Made it to getArticleComments')
   const { article_id } = req.params;
   fetchArticleComments(article_id)
     .then(comments => {
