@@ -59,7 +59,7 @@ describe('app', () => {
             expect(article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at')
           })
       });
-      it('/:article_id GET:404 Returns \'Article does not exist\' when passed \n\t a valid article_id not found in the database', () => {
+      it('/:article_id GET:404 Returns \'Article does not exist\' when \n\t passed a valid article_id not found in the database', () => {
         return request(app)
           .get('/api/articles/9999')
           .expect(404)
@@ -94,7 +94,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Number of votes to add not passed');
           })
       });
-      it('/:article_id PATCH:400 Returns \'Invalid number of votes to add \n\t\' when passed invalid value for inc_votes on request body \n\t e.g. {inc_votes: \'cats\'}', () => {
+      it('/:article_id PATCH:400 Returns \'Invalid number of votes \n\t to add\' when passed invalid value for \n\t inc_votes on request body \n\t e.g. {inc_votes: \'cats\'}', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({ inc_votes: "cats" })
@@ -102,6 +102,15 @@ describe('app', () => {
           .then(response => {
             expect(response.body.msg).to.equal('Invalid number of votes to add');
           })
+      });
+      it('/:article_id PATCH:400 Returns \'Number of votes to add \n\tnot passed\' when passed argument other than inc_votes in \n\t the request body', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ name: "Jordan" })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Number of votes to add not passed')
+          });
       });
       it('/:article_id PATCH:400 Returns \'Invalid properties in \n\t request\' when passed extra arguments other than inc_votes in \n\t the request body', () => {
         return request(app)
@@ -111,6 +120,21 @@ describe('app', () => {
           .then(response => {
             expect(response.body.msg).to.equal('Invalid properties in request')
           });
+      });
+      it('/:article_id/comments GET:200 Returns all of the \n\t comments for a given article', () => {
+        return request(app)
+          .get('/api/articles/1/comments')
+          .expect(200)
+          .then(response => {
+            expect(response.body.comments).to.be.an('Array');
+            const { comments } = response.body;
+            expect(comments[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body')
+          })
+      })
+    });
+    describe('/comments', () => {
+      it('', () => {
+
       });
     });
   });

@@ -32,5 +32,14 @@ exports.updateArticle = (article_id, updateData) => {
       const article = { article: response[0] };
       return article;
     })
+}
 
+exports.fetchArticleComments = (article_id) => {
+  return knextion('comments')
+    .where('article_id', '=', article_id)
+    .select('author', 'body', 'comment_id', 'created_at', 'votes')
+    .then(comments => {
+      comments = { comments: comments };
+      return comments;
+    })
 }

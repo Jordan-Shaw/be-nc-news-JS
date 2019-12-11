@@ -1,4 +1,4 @@
-const { fetchArticle, updateArticle } = require('../models/articles-m.js')
+const { fetchArticle, updateArticle, fetchArticleComments } = require('../models/articles-m.js')
 
 exports.getArticle = (req, res, next) => {
   // console.log('Made it to getByArticleId...');
@@ -25,4 +25,15 @@ exports.patchArticle = (req, res, next) => {
     .catch(err => {
       next(err);
     });
+}
+
+exports.getArticleComments = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleComments(article_id)
+    .then(comments => {
+      res.status(200).send(comments);
+    })
+    .catch((err) => {
+      next(err);
+    })
 }
