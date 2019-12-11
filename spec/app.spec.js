@@ -247,6 +247,7 @@ describe('app', () => {
             expect(articles[0]).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count');
           });
       });
+      it('/ GET:200 Should accept a author')
     });
     describe('/comments', () => {
       it('/:comment_id PATCH:200 Successfully adds passed \n\t number of votes to \'votes\' property and returns the \n\t modified comment', () => {
@@ -279,9 +280,33 @@ describe('app', () => {
           .then(response => {
             expect(response.body.msg).to.equal('Invalid ID provided');
           });
+      });
+      it('/:comment_id DELETE:200 Should delete the given comment \n\t  and respond with no content.', () => {
+        return request(app)
+          .delete('/api/comments/1')
+          .expect(204)
+        // .then(response => {
+        //   const { content } = response.body;
+        //   expect(content).to.equal(undefined);
       })
+      it('/:comment_id PATCH:404 Returns \'Comment does not exist\' \n\t when passed incorrect comment_id', () => {
+        return request(app)
+          .delete('/api/comments/9999')
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal('Comment does not exist');
+          });
+      });
+      it('/:comment_id PATCH:400 Returns \'Invalid comment ID\' \n\t when passed invalid comment_id', () => {
+        return request(app)
+          .delete('/api/comments/The_Thiefs_Journal')
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid ID provided');
+          });
+      });
     });
   });
 });
 
-//NEED TO DO PATCH:404 FOR ARTICLES, FOR WHEN ARTICLE DOESN'T EXIST ETC.
+

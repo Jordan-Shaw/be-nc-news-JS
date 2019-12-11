@@ -67,6 +67,8 @@ exports.postComment = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   // console.log('Made it to getArticles');
+  const { query } = req;
+  // console.log(query);
   fetchArticles()
     .then(response => {
       res.status(200).send(response);

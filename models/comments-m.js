@@ -18,3 +18,21 @@ exports.updateComment = (comment_id, updateData) => {
 
     })
 }
+
+exports.removeComment = (comment_id) => {
+  // console.log('Made it to removeComment');
+  return knextion
+    .select('*')
+    .from('comments')
+    .returning('*')
+    .where('comment_id', '=', comment_id)
+    .then(response => {
+      if (response.length === 0) {
+        return Promise.reject({ status: 404, msg: "Comment does not exist" })
+      } else {
+        return knextion('comments')
+          .where('comment_id', '=', comment_id)
+          .del();
+      };
+    });
+}
