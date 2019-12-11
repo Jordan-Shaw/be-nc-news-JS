@@ -10,7 +10,7 @@ app.use('/api', apiRouter);
 
 // generic error handler
 app.use((err, req, res, next) => {
-  const { path } = req.route;
+  // console.log(err);
 
   if (!err.status) {
     next(err)
@@ -20,14 +20,13 @@ app.use((err, req, res, next) => {
 
 // PSQL error handler
 app.use((err, req, res, next) => {
-  const { inc_votes } = req.body
   const psqlErrors = {
-    "22P02": "Invalid Article ID"
+    "22P02": "Invalid Article ID",
+    "23503": "Incorrect username provided"
   };
 
-  if (err.code === '22P02') {
-    res.status(400).send({ msg: psqlErrors[err.code] })
-  }
+  res.status(400).send({ msg: psqlErrors[err.code] })
+
 })
 
 module.exports = app;

@@ -153,8 +153,61 @@ describe('app', () => {
           .expect(200)
           .then(response => {
             expect(response.body).to.deep.equal({ comments: [] });
-          })
-      })
+          });
+      });
+      it('/:article_id/comments POST:200 Succesfully adds a \n\t comment and returns posted comment when passed an \n\t extant article\'s ID and req.body', () => {
+        return request(app)
+          .post('/api/articles/2/comments')
+          .send({ username: 'butter_bridge', body: 'Test, test test test!' })
+          .expect(200)
+          .then(response => {
+            expect(response.body.comment).to.be.an('Object');
+            const { comment } = response.body;
+            expect(comment).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body')
+            return request(app)
+              .get('/api/articles/2/comments')
+              .expect(200)
+              .then(response => {
+                expect(response.body.comments.length).to.equal(1);
+              });
+          });
+      });
+      it('/:article_id/comments POST:400 Returns \'No username \n\t provided\' when username property not passed in sent object', () => {
+        return request(app)
+          .post('/api/articles/2/comments')
+          .send({ body: 'Shouldn\'t be added!' })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('No username provided')
+          });
+      });
+      it('/:article_id/comments POST:400 Returns \'No text \n\t provided\' when body property not passed in sent object', () => {
+        return request(app)
+          .post('/api/articles/2/comments')
+          .send({ username: 'Shouldn\'t be added!' })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('No text provided')
+          });
+      });
+      it('/:article_id/comments POST:400 Returns \'Invalid properties \n\t provided\' when properties other than body/username are \n\t passed in sent object', () => {
+        return request(app)
+          .post('/api/articles/2/comments')
+          .send({ username: 'butter_bridge', body: 'Shouldn\'t be added!', votes: 25 })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Invalid properties provided')
+          });
+      });
+      it('/:article_id/comments POST:400 Returns \'Incorrect username \n\t provided\' when an incorrect username is \n\t passed in sent object', () => {
+        return request(app)
+          .post('/api/articles/2/comments')
+          .send({ username: 'butter_ridge', body: 'Shouldn\'t be added!' })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Incorrect username provided')
+          });
+      });
     });
     xdescribe('/comments', () => {
       it('', () => {

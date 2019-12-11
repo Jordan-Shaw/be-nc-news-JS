@@ -1,4 +1,4 @@
-const { fetchArticle, updateArticle, fetchArticleComments } = require('../models/articles-m.js')
+const { fetchArticle, updateArticle, fetchComments, addComment } = require('../models/articles-m.js')
 
 exports.getArticle = (req, res, next) => {
   // console.log('Made it to getArticle...');
@@ -27,14 +27,28 @@ exports.patchArticle = (req, res, next) => {
     });
 }
 
-exports.getArticleComments = (req, res, next) => {
+exports.getComments = (req, res, next) => {
   // console.log('Made it to getArticleComments')
   const { article_id } = req.params;
-  fetchArticleComments(article_id)
+  fetchComments(article_id)
     .then(comments => {
       res.status(200).send(comments);
     })
     .catch((err) => {
       next(err);
+    })
+}
+
+exports.postComment = (req, res, next) => {
+  // console.log('Made it to postComment');
+  const { article_id } = req.params;
+  const comment = req.body;
+
+  addComment(article_id, comment)
+    .then(comment => {
+      res.status(200).send(comment);
+    })
+    .catch(err => {
+      next(err)
     })
 }

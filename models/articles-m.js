@@ -41,7 +41,7 @@ exports.updateArticle = (article_id, updateData) => {
     })
 }
 
-exports.fetchArticleComments = (article_id) => {
+exports.fetchComments = (article_id) => {
   // console.log('Made it to  fetchArticleComments');
   return knextion('comments')
     .where('article_id', '=', article_id)
@@ -59,19 +59,31 @@ exports.fetchArticleComments = (article_id) => {
             } else return comments;
           })
       }
-      // ^ puts response in correct format
-
-      //could make two requests, the first to 'articles' to see if the article is in the database, and if it is to do the second request for the comments. but that seems really inefficient 
-
-      //could join the articles and comments tables? Maybe do it that way...
-
-
-
-      // if (!comments.comments) {
-      //   return Promise.reject({ status: 404, msg: 'Article does not exist' })
-      // }
-
-      // ^ did it this way for the articles, but wont work here as it would stop it from returning an empty array for articles that exist but have no comments...
       return comments;
     })
+}
+
+exports.addComment = (article_id, comment) => {
+  // console.log('Made it to addComment')
+  if (!comment.username) {
+    return Promise.reject({ status: 400, msg: "No username provided" })
+  } else if (!comment.body) {
+    return Promise.reject({ status: 400, msg: "No text provided" })
+  } else if (Object.keys(comment).length > 2) {
+    return Promise.reject({ status: 400, msg: "Invalid properties provided" })
+  }
+
+  comment.article_id = article_id;
+  comment.author = comment.username;
+  delete comment.username;
+
+  return knextion
+    .insert(comment)
+    .into('comments')
+    .returning(['author', 'body', 'comment_id', 'created_at', 'votes'])
+    .then(comment => {
+      comment = { comment: comment[0] }
+      return comment;
+    })
+
 }
