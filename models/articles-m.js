@@ -87,3 +87,14 @@ exports.addComment = (article_id, comment) => {
     })
 
 }
+
+exports.fetchArticles = () => {
+  return knextion
+    .select('*')
+    .from('articles')
+    .then(articles => {
+      articles = { articles: articles };
+      return articles;
+    });
+
+}

@@ -208,11 +208,38 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Incorrect username provided')
           });
       });
-    });
-    xdescribe('/comments', () => {
-      it('', () => {
-
+      it.only('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
+        return request(app)
+          .get('/api/articles/')
+          .expect(200)
+          .then(response => {
+            expect(response.body).to.be.an('Object');
+            expect(response.body.articles).to.be.an('Array');
+            const { articles } = response.body;
+            expect(articles[0]).to.be.an('Object');
+            expect(articles[0]).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count');
+          });
       });
+    });
+    describe('/comments', () => {
+      it('/:comment_id PATCH:200 Successfully adds passed \n\t number of votes to \'votes\' property and returns the \n\t modified comment', () => {
+        return request(app)
+          .patch('/api/comments/1')
+          .send({ inc_votes: 404 })
+          .expect(200)
+          .then(response => {
+            expect(response.body).to.be.an('Object');
+            expect(response.body.comment).to.be.an('Object');
+            const { comment } = response.body;
+            expect(comment).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+            expect(comment.votes).to.equal(420);
+          });
+      });
+      xit('/:comment_id PATCH:404 Returns \'Comment does not exist\' \n\t when passed incorrect comment_id', () => {
+        return request(app)
+      })
     });
   });
 });
+
+//NEED TO DO PATCH:404 FOR ARTICLES, FOR WHEN ARTICLE DOESN'T EXIST ETC.
