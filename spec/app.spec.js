@@ -139,12 +139,20 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid Article ID');
           });
       });
-      xit('/:article_id/comments GET:404 Returns \'Article does not \n\t exist\' when passed a valid article_id not \n\t found in the database', () => {
+      it('/:article_id/comments GET:404 Returns \'Article does not \n\t exist\' when passed a valid article_id not \n\t found in the database', () => {
         return request(app)
           .get('/api/articles/9999/comments')
           .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Article does not exist');
+          });
+      });
+      it('/:article_id/comments GET:200 Returns an empty array \n\t when passed an extant article\'s ID with no comments', () => {
+        return request(app)
+          .get('/api/articles/2/comments')
+          .expect(200)
+          .then(response => {
+            expect(response.body).to.deep.equal({ comments: [] });
           })
       })
     });

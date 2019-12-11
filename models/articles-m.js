@@ -49,6 +49,16 @@ exports.fetchArticleComments = (article_id) => {
     .then(comments => {
       // console.log(comments);
       comments = { comments: comments };
+      if (comments.comments.length === 0) {
+        return knextion('articles')
+          .where('article_id', '=', article_id)
+          .select('*')
+          .then(articles => {
+            if (articles.length === 0) {
+              return Promise.reject({ status: 404, msg: 'Article does not exist' })
+            } else return comments;
+          })
+      }
       // ^ puts response in correct format
 
       //could make two requests, the first to 'articles' to see if the article is in the database, and if it is to do the second request for the comments. but that seems really inefficient 
