@@ -121,7 +121,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid properties in request')
           });
       });
-      it.only('/:article_id PATCH:404 Returns \'Article does not exist\' \n\t when passed incorrect article_id', () => {
+      it('/:article_id PATCH:404 Returns \'Article does not exist\' \n\t when passed incorrect article_id', () => {
         return request(app)
           .patch('/api/articles/9999')
           .send({ inc_votes: 1000 })
@@ -208,15 +208,24 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid properties provided')
           });
       });
-      it('/:article_id/comments POST:400 Returns \'Incorrect username \n\t provided\' when an incorrect username is \n\t passed in sent object', () => {
+      it('/:article_id/comments POST:404 Returns \'Incorrect username \n\t provided\' when an incorrect username is \n\t passed in sent object', () => {
         return request(app)
           .post('/api/articles/2/comments')
           .send({ username: 'butter_ridge', body: 'Shouldn\'t be added!' })
-          .expect(400)
+          .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Incorrect username provided')
           });
       });
+      it('/:article_id/comments POST:404 Returns \'Article does not \n\t exist\' when passed valid but incorrect article_id', () => {
+        return request(app)
+          .post('/api/articles/9999/comments')
+          .send({ username: 'butter_bridge', body: 'Shouldn\'t be added!' })
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal('Article does not exist');
+          })
+      })
       it('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
         return request(app)
           .get('/api/articles/')

@@ -22,11 +22,15 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   const psqlErrors = {
     "22P02": "Invalid Article ID",
-    "23503": "Incorrect username provided"
+    "23503": {
+      "author": "Incorrect username provided", "article_id": "Article does not exist"
+    }
   };
-
-  res.status(400).send({ msg: psqlErrors[err.code] })
-
+  if (err.code === "23503") {
+    res.status(404).send({ msg: psqlErrors[err.code][err.problem] })
+  } else {
+    res.status(400).send({ msg: psqlErrors[err.code] })
+  }
 })
 
 module.exports = app;

@@ -37,7 +37,11 @@ exports.updateArticle = (article_id, updateData) => {
     .increment('votes', inc_votes)
     .then(response => {
       const article = { article: response[0] };
-      return article;
+      if (!article.article) {
+        return Promise.reject({ status: 404, msg: "Article does not exist" })
+      } else {
+        return article;
+      }
     })
 }
 

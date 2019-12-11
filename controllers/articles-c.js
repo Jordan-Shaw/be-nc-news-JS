@@ -49,9 +49,15 @@ exports.postComment = (req, res, next) => {
       res.status(200).send(comment);
     })
     .catch(err => {
-      next(err)
-    })
-}
+      if (!err.detail) {
+        next(err);
+      } else {
+        const sliceIndex = err.detail.indexOf(')');
+        err.problem = err.detail.slice(5, sliceIndex);
+        next(err)
+      };
+    });
+};
 
 exports.getArticles = (req, res, next) => {
   // console.log('Made it to getArticles');
