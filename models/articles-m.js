@@ -44,17 +44,18 @@ exports.updateArticle = (article_id, updateData) => {
     })
 }
 
-exports.fetchComments = (article_id, sort_by) => {
+exports.fetchComments = (article_id, { sort_by, order }) => {
   if (!sort_by) {
-    sort_by = 'comment_id:asc'
+    sort_by = 'created_at'
   }
-
-  const sortParams = sort_by.split(':');
+  if (!order) {
+    order = 'desc'
+  }
 
   return knextion('comments')
     .where('article_id', '=', article_id)
     .select('author', 'body', 'comment_id', 'created_at', 'votes')
-    .orderBy(sortParams[0], sortParams[1])
+    .orderBy(sort_by, order)
     .then(comments => {
       comments = { comments: comments };
       if (comments.comments.length === 0) {

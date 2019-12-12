@@ -43,8 +43,17 @@ describe('app', () => {
           .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('User does not exist');
-          })
-      })
+          });
+      });
+      it('/:username PUT:405 Returns Method Not \n\t Found when put requested', () => {
+        return request(app)
+          .put('/api/users/butter_bridge')
+          .send({ user: 'butter_bridge', avatar_url: "www.google.com" })
+          .expect(405)
+          .then(response => {
+            expect(response.body.msg).to.equal("Method Not Found");
+          });
+      });
     });
     describe('/articles', () => {
       it('/:article_id GET:200 Returns the specified article', () => {
@@ -243,7 +252,7 @@ describe('app', () => {
       });
       it('/:article_id/comments Will sort_by ASC or DESC order', () => {
         return request(app)
-          .get('/api/articles/5/comments?sort_by=votes:asc')
+          .get('/api/articles/5/comments?sort_by=votes&order=asc')
           .expect(200)
           .then(response => {
             expect(response.body.comments[0].author).to.equal('butter_bridge')
@@ -318,6 +327,15 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Topic puppies is not in the database');
           });
       });
+      it('/api/articles/1/comments?sort_by=votes GET:200 responds with the correct comments', () => {
+        return request(app)
+          .get('/api/articles/1/comments?sort_by=votes')
+          .expect(200)
+          .then(response => {
+            expect(response.body.comments.length).to.equal(13);
+            expect(response.body.comments[0].votes).to.equal(100);
+          });
+      })
     });
     describe('/comments', () => {
       it('/:comment_id PATCH:200 Successfully adds passed \n\t number of votes to \'votes\' property and returns the \n\t modified comment', () => {
@@ -457,6 +475,15 @@ describe('app', () => {
           .then(response => {
             expect(response.body.comment.votes).to.equal(16);
           })
+      });
+      it('/:comment_id PATCH:200 Returns unchanged comment \n\t when passed no inc_votes on request body', () => {
+        return request(app)
+          .put('/api/comments/1')
+          .send({ user: 'butter_bridge' })
+          .expect(405)
+          .then(response => {
+            expect(response.body.msg).to.equal("Method Not Found");
+          });
       });
     });
   });

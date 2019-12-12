@@ -3,9 +3,9 @@ const { getTopics } = require('../controllers/topics-c.js');
 
 topicsRouter.route('/')
   .get(getTopics)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: "Method Not Found" })
+  })
 
-topicsRouter.all('/', (req, res, next) => {
-  res.status(405).send({ msg: "Method Not Found" })
-});
 
 module.exports = topicsRouter;

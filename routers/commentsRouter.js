@@ -4,7 +4,15 @@ const { patchComment, deleteComment, getAllComments: getAllComments } = require(
 commentsRouter.route('/:comment_id')
   .patch(patchComment)
   .delete(deleteComment)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: "Method Not Found" })
+  })
+
 
 commentsRouter.route('/')
-  .get(getAllComments);
+  .get(getAllComments)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: "Method Not Found" })
+  });
+
 module.exports = commentsRouter;

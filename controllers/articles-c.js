@@ -33,9 +33,9 @@ exports.patchArticle = (req, res, next) => {
 
 exports.getComments = (req, res, next) => {
   const { article_id } = req.params;
-  const { sort_by } = req.query;
+  const { query } = req;
 
-  fetchComments(article_id, sort_by)
+  fetchComments(article_id, query)
     .then(comments => {
       res.status(200).send(comments);
     })
