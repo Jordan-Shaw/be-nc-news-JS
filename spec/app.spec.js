@@ -18,7 +18,6 @@ describe('app', () => {
           .get('/api/topics')
           .expect(200)
           .then(response => {
-            // console.log(response.body)
             expect(response.body.topics).to.be.an('Array');
             const { topics } = response.body
             expect(topics[0]).to.have.keys('slug', 'description');
@@ -32,7 +31,6 @@ describe('app', () => {
           .get('/api/users/butter_bridge')
           .expect(200)
           .then(response => {
-            // console.log(response.body);
             expect(response.body.user).to.be.an('Object');
             const { user } = response.body;
             expect(user).to.have.keys('username', 'avatar_url', 'name');
@@ -391,11 +389,8 @@ describe('app', () => {
               .then(response => {
                 expect(response.body.comments.length).to.equal(17);
               })
-          })
-        // .then(response => {
-        //   const { content } = response.body;
-        //   expect(content).to.equal(undefined);
-      })
+          });
+      });
       it('/:comment_id PATCH:404 Returns \'Comment does not exist\' \n\t when passed incorrect comment_id', () => {
         return request(app)
           .delete('/api/comments/9999')
