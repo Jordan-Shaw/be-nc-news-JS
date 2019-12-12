@@ -36,9 +36,9 @@ exports.patchArticle = (req, res, next) => {
 exports.getComments = (req, res, next) => {
   // console.log('Made it to getArticleComments')
   const { article_id } = req.params;
-  const { query } = req;
+  const { sort_by } = req.query;
 
-  fetchComments(article_id, query)
+  fetchComments(article_id, sort_by)
     .then(comments => {
       res.status(200).send(comments);
     })
@@ -70,8 +70,7 @@ exports.postComment = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
   // console.log('Made it to getArticles');
   const { query } = req;
-  // console.log(query);
-  fetchArticles()
+  fetchArticles(query)
     .then(response => {
       res.status(200).send(response);
     })

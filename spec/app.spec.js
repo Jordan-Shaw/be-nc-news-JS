@@ -243,7 +243,7 @@ describe('app', () => {
             expect(response.body.comments[0].author).to.equal('icellusedkars')
           });
       });
-      it.only('/:article_id/comments Will sort_by ASC or DESC order', () => {
+      it('/:article_id/comments Will sort_by ASC or DESC order', () => {
         return request(app)
           .get('/api/articles/5/comments?sort_by=votes:asc')
           .expect(200)
@@ -251,7 +251,7 @@ describe('app', () => {
             expect(response.body.comments[0].author).to.equal('butter_bridge')
           });
       });
-      it('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
+      it('/:article_id/comments GET:200 Returns all of the articles, \n\t including a comment count', () => {
         return request(app)
           .get('/api/articles/')
           .expect(200)
@@ -263,7 +263,39 @@ describe('app', () => {
             expect(articles[0]).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count');
           });
       });
-      it('/ GET:200 Should accept a author')
+      // it.only('/:article_id/comments GET:200 Responds with \n\t \'Invalid query\' when passed an invalid query', () => {
+      //   return request(app)
+      //     .get('/api/articles/5/comments?author=butter_bridge')
+      //     .expect(400)
+      //     .then(response => {
+      //       console.log(response.body);
+      //       expect(response.body.msg).to.equal('Invalid query')
+      //     })
+      // })
+      it('/api/articles?author= GET:200 Should accept an author query', () => {
+        return request(app)
+          .get('/api/articles?author=butter_bridge')
+          .expect(200)
+          .then(response => {
+            expect(response.body.articles.length).to.equal(3);
+          });
+      });
+      it('/api/articles?topics= GET:200 Should accept a topics query', () => {
+        return request(app)
+          .get('/api/articles?topic=cats')
+          .expect(200)
+          .then(response => {
+            expect(response.body.articles.length).to.equal(1);
+          });
+      });
+      it('/api/articles?sort_by=puppies GET:400 Responds with \n\t \'Cannot sort by ${Column} - ${Column} column does not exist\'', () => {
+        return request(app)
+          .get('/api/articles?sort_by=puppies')
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Cannot sort by puppies - puppies column does not exist');
+          })
+      })
     });
     describe('/comments', () => {
       it('/:comment_id PATCH:200 Successfully adds passed \n\t number of votes to \'votes\' property and returns the \n\t modified comment', () => {

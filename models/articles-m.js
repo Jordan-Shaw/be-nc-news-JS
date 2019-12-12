@@ -45,13 +45,18 @@ exports.updateArticle = (article_id, updateData) => {
     })
 }
 
-exports.fetchComments = (article_id, queries) => {
+exports.fetchComments = (article_id, sort_by) => {
   // console.log('Made it to  fetchArticleComments');
-  const sort_by = queries.sort_by.split(':');
+  if (!sort_by) {
+    sort_by = 'comment_id:asc'
+  }
+
+  const sortParams = sort_by.split(':');
+
   return knextion('comments')
     .where('article_id', '=', article_id)
     .select('author', 'body', 'comment_id', 'created_at', 'votes')
-    .orderBy(sort_by[0] || 'comment_id', sort_by[1] || 'asc')
+    .orderBy(sortParams[0], sortParams[1])
     .then(comments => {
       // console.log(comments);
       comments = { comments: comments };
@@ -94,13 +99,30 @@ exports.addComment = (article_id, comment) => {
 
 }
 
-exports.fetchArticles = () => {
+exports.fetchArticles = ({ sort_by, order, author, topic }) => {
+  if (!sort_by) {
+    sort_by = 'article_id';
+  }
+  if (!order) {
+    order = "asc";
+  }
+
   return knextion
     .select('articles.*')
     .from('articles')
+    .orderBy(sort_by, order)
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .count('comment_id', { as: 'comment_count' })
     .groupBy('articles.article_id')
+    .modify((query) => {
+      if (author) {
+        query.where('articles.author', '=', author)
+      }
+      if (topic) {
+        query.where({ topic });
+      }
+      // two if statements here do the same thing, where statements just written differently 
+    })
     .then(articles => {
       articles = { articles: articles };
       return articles;

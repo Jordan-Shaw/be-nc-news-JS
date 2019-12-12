@@ -11,7 +11,8 @@ app.use('/api', apiRouter);
 
 // generic error handler
 app.use((err, req, res, next) => {
-  console.log(err);
+  // console.log(req.query);
+  // console.log(err);
   if (!err.status) {
     next(err)
   }
@@ -26,7 +27,8 @@ app.use((err, req, res, next) => {
     "23503": {
       "author": "Incorrect username provided",
       "article_id": "Article does not exist"
-    }
+    },
+    "42703": `Cannot sort by ${req.query.sort_by} - ${req.query.sort_by} column does not exist`
   };
   if (err.code === "23503") {
     res.status(404).send({ msg: psqlErrors[err.code][err.problem] })
