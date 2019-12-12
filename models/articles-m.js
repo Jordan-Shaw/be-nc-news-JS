@@ -18,14 +18,13 @@ exports.fetchArticle = (article_id) => {
 }
 
 exports.updateArticle = (article_id, updateData) => {
+  if (!updateData.inc_votes) {
+    updateData.inc_votes = 0;
+  }
   const { inc_votes } = updateData
 
   if (Object.keys(updateData).length > 1) {
     return Promise.reject({ status: 400, msg: "Invalid properties in request" })
-  } else if (!inc_votes) {
-    return Promise.reject({
-      status: 400, msg: 'Number of votes to add not passed'
-    })
   } else if (typeof inc_votes !== 'number') {
     return Promise.reject({ status: 400, msg: 'Invalid number of votes to add' })
   }

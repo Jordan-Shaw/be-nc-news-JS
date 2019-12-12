@@ -1,11 +1,10 @@
 const knextion = require('../db/connection.js')
 
 exports.updateComment = (comment_id, updateData) => {
-  // console.log('Made it to updateComment');
+  if (!updateData.inc_votes) { updateData.inc_votes = 0 }
   const { inc_votes } = updateData
-  if (!inc_votes) {
-    return Promise.reject({ status: 400, msg: "Number of votes to add not passed" })
-  } else if (Object.keys(updateData).length > 1) {
+
+  if (Object.keys(updateData).length > 1) {
     return Promise.reject({ status: 400, msg: 'Invalid properties in request' })
   } else if (typeof inc_votes !== 'number') {
     return Promise.reject({ status: 400, msg: 'Invalid number of votes to add' })
@@ -28,7 +27,6 @@ exports.updateComment = (comment_id, updateData) => {
 }
 
 exports.removeComment = (comment_id) => {
-  // console.log('Made it to removeComment');
   return knextion
     .select('*')
     .from('comments')
@@ -45,11 +43,20 @@ exports.removeComment = (comment_id) => {
     });
 }
 
-exports.fetchAllComments = () => {
-  // console.log('made it to fetchComments')
+exports.fetchAllComments = ({ sort_by, order }) => {
+  if (!sort_by) {
+    sort_by = 'created_at';
+  }
+  if (!order) {
+    order = "desc";
+  }
+  if (order !== "asc" && order !== "desc") {
+    return Promise.reject({ status: 400, msg: `Cannot order by ${order} - order must be asc or desc` })
+  }
   return knextion
     .select('*')
     .from('comments')
+    .orderBy(sort_by, order)
     .returning('*')
     .then(response => {
       return { comments: response }

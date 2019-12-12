@@ -1,7 +1,6 @@
 const { updateComment, removeComment, fetchAllComments } = require('../models/comments-m.js')
 
 exports.patchComment = (req, res, next) => {
-  // console.log('Made it to patchComment');
   const { comment_id } = req.params;
   const updateData = req.body;
 
@@ -15,7 +14,6 @@ exports.patchComment = (req, res, next) => {
 }
 
 exports.deleteComment = (req, res, next) => {
-  // console.log('made it to delete comment');
   const { comment_id } = req.params;
   removeComment(comment_id)
     .then(response => {
@@ -27,8 +25,8 @@ exports.deleteComment = (req, res, next) => {
 }
 
 exports.getAllComments = (req, res, next) => {
-  // console.log('Made it to getAllComments')
-  fetchAllComments()
+  const { query } = req;
+  fetchAllComments(query)
     .then(response => {
       res.status(200).send(response);
     })

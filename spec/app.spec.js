@@ -85,13 +85,13 @@ describe('app', () => {
             expect(response.body.article.votes).to.equal(420);
           })
       });
-      it('/:article_id PATCH:400 Returns \'Number of votes to add \n\tnot passed\' when passed no inc_votes on request body', () => {
+      it('/:article_id PATCH:200 Returns unchanged article \n\t when passed no inc_votes on request body', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({})
-          .expect(400)
+          .expect(200)
           .then(response => {
-            expect(response.body.msg).to.equal('Number of votes to add not passed');
+            expect(response.body.article.votes).to.equal(100);
           })
       });
       it('/:article_id PATCH:400 Returns \'Invalid number of votes \n\t to add\' when passed invalid value for \n\t inc_votes on request body \n\t e.g. {inc_votes: \'cats\'}', () => {
@@ -103,13 +103,13 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid number of votes to add');
           })
       });
-      it('/:article_id PATCH:400 Returns \'Number of votes to add \n\tnot passed\' when passed argument other than inc_votes in \n\t the request body', () => {
+      it('/:article_id PATCH:400 Returns \'Invalid properties \n\tin request\' when passed argument other than inc_votes in \n\t the request body', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({ name: "Jordan" })
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Number of votes to add not passed')
+            expect(response.body.msg).to.equal('Invalid properties in request')
           });
       });
       it('/:article_id PATCH:400 Returns \'Invalid properties in \n\t request\' when passed extra arguments other than inc_votes in \n\t the request body', () => {
@@ -173,11 +173,11 @@ describe('app', () => {
             expect(response.body).to.deep.equal({ comments: [] });
           });
       });
-      it('/:article_id/comments POST:200 Succesfully adds a \n\t comment and returns posted comment when passed an \n\t extant article\'s ID and req.body', () => {
+      it('/:article_id/comments POST:201 Succesfully adds a \n\t comment and returns posted comment when passed an \n\t extant article\'s ID and req.body', () => {
         return request(app)
           .post('/api/articles/2/comments')
           .send({ username: 'butter_bridge', body: 'Test, test test test!' })
-          .expect(200)
+          .expect(201)
           .then(response => {
             expect(response.body.comment).to.be.an('Object');
             const { comment } = response.body;
@@ -353,13 +353,13 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid ID provided');
           });
       });
-      it('/:comment_id PATCH:400 Returns \'Number of votes \n\t to add not passed\' when sent property other than inc_votes', () => {
+      it('/:comment_id PATCH:400 Returns \'Invalid properties \n\t in request\' when sent property other than inc_votes', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({ name: 'Jordan' })
           .expect(400)
           .then(response => {
-            expect(response.body.msg).to.equal('Number of votes to add not passed');
+            expect(response.body.msg).to.equal('Invalid properties in request');
           });
       });
       it('/:comment_id PATCH:400 Responds with \'Invalid properties in \n\t request\' when passed invalid properties', () => {
@@ -444,6 +444,24 @@ describe('app', () => {
           .then(response => {
             expect(response.body.article.comment_count).to.equal('13');
           });
+      });
+      it('/articles/ PUT:405 responds with method not found', () => {
+        return request(app)
+          .put('/api/articles/1')
+          .send({ msg: 'Wabbajack' })
+          .expect(405)
+          .then(response => {
+            expect(response.body.msg).to.equal('Method Not Found');
+          });
+      });
+      it('/:comment_id PATCH:200 Returns unchanged comment \n\t when passed no inc_votes on request body', () => {
+        return request(app)
+          .patch('/api/comments/1')
+          .send({})
+          .expect(200)
+          .then(response => {
+            expect(response.body.comment.votes).to.equal(16);
+          })
       });
     });
   });
