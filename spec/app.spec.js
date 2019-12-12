@@ -56,7 +56,7 @@ describe('app', () => {
           .then(response => {
             expect(response.body.article).to.be.an('Object');
             const { article } = response.body;
-            expect(article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at')
+            expect(article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count')
           })
       });
       it('/:article_id GET:404 Returns \'Article does not exist\' when \n\t passed a valid article_id not found in the database', () => {
@@ -304,18 +304,18 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Cannot order by puppies - order must be asc or desc');
           });
       });
-      it('/api/articles?author=puppies GET:400 Responds with \n\t \'Author ${query} is not in the database\'', () => {
+      it('/api/articles?author=puppies GET:404 Responds with \n\t \'Author ${query} is not in the database\'', () => {
         return request(app)
           .get('/api/articles?author=puppies')
-          .expect(400)
+          .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Author puppies is not in the database');
           });
       });
-      it('/api/articles?topic=puppies GET:400 Responds with \n\t \'Topic ${query} is not in the database\'', () => {
+      it('/api/articles?topic=puppies GET:404 Responds with \n\t \'Topic ${query} is not in the database\'', () => {
         return request(app)
           .get('/api/articles?topic=puppies')
-          .expect(400)
+          .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal('Topic puppies is not in the database');
           });
@@ -410,6 +410,39 @@ describe('app', () => {
           .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal('Invalid ID provided');
+          });
+      });
+      it('/articles/ GET:200 Sort_by author defaults to descending', () => {
+        return request(app)
+          .get('/api/articles?sort_by=author')
+          .expect(200)
+          .then(response => {
+            expect(response.body.articles[0].author).to.equal('rogersop');
+          });
+      });
+      it('/articles/ GET:200 Sort_by defaults to date', () => {
+        return request(app)
+          .get('/api/articles?order=asc')
+          .expect(200)
+          .then(response => {
+            expect(response.body.articles[0].title).to.equal('Moustache');
+          });
+      });
+      it('/articles/ PATCH:405 responds with method not found', () => {
+        return request(app)
+          .patch('/api/articles')
+          .send({ msg: 'Wabbajack' })
+          .expect(405)
+          .then(response => {
+            expect(response.body.msg).to.equal('Method Not Found');
+          });
+      });
+      it('/articles/:comment_id GET:200 responds with correct comment count', () => {
+        return request(app)
+          .get('/api/articles/1')
+          .expect(200)
+          .then(response => {
+            expect(response.body.article.comment_count).to.equal('13');
           });
       });
     });

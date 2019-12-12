@@ -1,9 +1,13 @@
 const knextion = require('../db/connection.js')
 
 exports.fetchArticle = (article_id) => {
-  return knextion('articles')
-    .select('*')
-    .where('article_id', '=', article_id)
+  return knextion
+    .select('articles.*')
+    .from(('articles'))
+    .where('articles.article_id', '=', article_id)
+    .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
+    .count('comment_id', { as: 'comment_count' })
+    .groupBy('articles.article_id')
     .then(response => {
       const article = { article: response[0] };
       if (!article.article) {
@@ -94,10 +98,10 @@ exports.addComment = (article_id, comment) => {
 
 exports.fetchArticles = ({ sort_by, order, author, topic }) => {
   if (!sort_by) {
-    sort_by = 'article_id';
+    sort_by = 'created_at';
   }
   if (!order) {
-    order = "asc";
+    order = "desc";
   }
   if (order !== "asc" && order !== "desc") {
     return Promise.reject({ status: 400, msg: `Cannot order by ${order} - order must be asc or desc` })
@@ -132,7 +136,7 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
         .where('username', '=', author)
         .then(response => {
           if (response.length === 0) {
-            return Promise.reject({ status: 400, msg: `Author ${author} is not in the database` })
+            return Promise.reject({ status: 404, msg: `Author ${author} is not in the database` })
           } else {
             return true;
           }
@@ -152,7 +156,7 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
         .where('slug', '=', topic)
         .then(response => {
           if (response.length === 0) {
-            return Promise.reject({ status: 400, msg: `Topic ${topic} is not in the database` })
+            return Promise.reject({ status: 404, msg: `Topic ${topic} is not in the database` })
           } else { return true; }
         })
     }

@@ -12,4 +12,8 @@ articlesRouter.route('/:article_id/comments')
   .get(getComments)
   .post(postComment);
 
+articlesRouter.all('/', (req, res, next) => {
+  res.status(405).send({ msg: "Method Not Found" })
+})
+
 module.exports = articlesRouter
