@@ -285,6 +285,14 @@ describe('app', () => {
         return request(app)
           .delete('/api/comments/1')
           .expect(204)
+          .then(() => {
+            return request(app)
+              .get('/api/comments/')
+              .expect(200)
+              .then(response => {
+                expect(response.body.comments.length).to.equal(17);
+              })
+          })
         // .then(response => {
         //   const { content } = response.body;
         //   expect(content).to.equal(undefined);
