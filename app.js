@@ -11,7 +11,7 @@ app.use('/api', apiRouter);
 
 // generic error handler
 app.use((err, req, res, next) => {
-  // console.log(err);
+  console.log(err);
 
   if (!err.status) {
     next(err)

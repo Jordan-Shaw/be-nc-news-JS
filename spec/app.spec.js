@@ -281,7 +281,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid ID provided');
           });
       });
-      it('/:comment_id DELETE:200 Should delete the given comment \n\t  and respond with no content.', () => {
+      it.only('/:comment_id DELETE:200 Should delete the given comment \n\t  and respond with no content.', () => {
         return request(app)
           .delete('/api/comments/1')
           .expect(204)

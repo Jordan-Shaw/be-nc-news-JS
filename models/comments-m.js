@@ -36,3 +36,14 @@ exports.removeComment = (comment_id) => {
       };
     });
 }
+
+exports.fetchComments = () => {
+  // console.log('made it to fetchComments')
+  return knextion
+    .select('*')
+    .from('comments')
+    .returning('*')
+    .then(response => {
+      return { comments: response }
+    })
+}
