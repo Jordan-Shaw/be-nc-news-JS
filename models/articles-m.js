@@ -102,8 +102,7 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
   if (order !== "asc" && order !== "desc") {
     return Promise.reject({ status: 400, msg: `Cannot order by ${order} - order must be asc or desc` })
   }
-
-  return knextion
+  const getTheArticles = knextion
     .select('articles.*')
     .from('articles')
     .orderBy(sort_by, order)
@@ -118,10 +117,76 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
         query.where({ topic });
       }
       // two if statements here do the same thing, where statements just written differently 
-    })
-    .then(articles => {
-      articles = { articles: articles };
-      return articles;
+    }).then(response => {
+      response = { articles: response };
+      return response;
     });
+
+  const extantAuthor = (author) => {
+    if (!author) {
+      return true
+    } else {
+      return knextion
+        .select('*')
+        .from('users')
+        .where('username', '=', author)
+        .then(response => {
+          if (response.length === 0) {
+            return Promise.reject({ status: 400, msg: `Author ${author} is not in the database` })
+          } else {
+            return true;
+          }
+        })
+    }
+  }
+
+  const authorPromise = extantAuthor(author);
+
+  const extantTopic = (topic) => {
+    if (!topic) {
+      return true
+    } else {
+      return knextion
+        .select('*')
+        .from('topics')
+        .where('slug', '=', topic)
+        .then(response => {
+          if (response.length === 0) {
+            return Promise.reject({ status: 400, msg: `topic ${topic} is not in the database` })
+          } else { return true; }
+        })
+    }
+  }
+  const topicPromise = extantTopic(topic)
+
+  return Promise.all([getTheArticles, authorPromise, topicPromise]).then(([getTheArticles, extantAuthor, extantTopic]) => {
+    // console.log(1, getTheArticles);
+    // console.log(2, extantAuthor);
+    // console.log(3, extantTopic);
+    if (extantAuthor === true && extantTopic === true) {
+      return getTheArticles;
+    }
+  })
+
+  // return knextion
+  //   .select('articles.*')
+  //   .from('articles')
+  //   .orderBy(sort_by, order)
+  //   .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
+  //   .count('comment_id', { as: 'comment_count' })
+  //   .groupBy('articles.article_id')
+  //   .modify((query) => {
+  //     if (author) {
+  //       query.where('articles.author', '=', author)
+  //     }
+  //     if (topic) {
+  //       query.where({ topic });
+  //     }
+  //     // two if statements here do the same thing, where statements just written differently 
+  //   })
+  //   .then(response => {
+  //     response = { articles: response };
+  //     return response;
+  //   });
 
 }
