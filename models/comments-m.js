@@ -45,7 +45,7 @@ exports.removeComment = (comment_id) => {
     });
 }
 
-exports.fetchComments = () => {
+exports.fetchAllComments = () => {
   // console.log('made it to fetchComments')
   return knextion
     .select('*')

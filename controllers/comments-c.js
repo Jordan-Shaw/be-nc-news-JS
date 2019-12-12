@@ -1,4 +1,4 @@
-const { updateComment, removeComment, fetchComments } = require('../models/comments-m.js')
+const { updateComment, removeComment, fetchAllComments } = require('../models/comments-m.js')
 
 exports.patchComment = (req, res, next) => {
   // console.log('Made it to patchComment');
@@ -26,9 +26,9 @@ exports.deleteComment = (req, res, next) => {
     })
 }
 
-exports.getComments = (req, res, next) => {
-  // console.log('Made it to getComments')
-  fetchComments()
+exports.getAllComments = (req, res, next) => {
+  // console.log('Made it to getAllComments')
+  fetchAllComments()
     .then(response => {
       res.status(200).send(response);
     })

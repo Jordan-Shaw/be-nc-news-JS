@@ -235,6 +235,22 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Article does not exist');
           });
       });
+      it('/:article_id/comments Should accept a sort_by query and order', () => {
+        return request(app)
+          .get('/api/articles/1/comments?sort_by=votes')
+          .expect(200)
+          .then(response => {
+            expect(response.body.comments[0].author).to.equal('icellusedkars')
+          });
+      });
+      it.only('/:article_id/comments Will sort_by ASC or DESC order', () => {
+        return request(app)
+          .get('/api/articles/5/comments?sort_by=votes:asc')
+          .expect(200)
+          .then(response => {
+            expect(response.body.comments[0].author).to.equal('butter_bridge')
+          });
+      });
       it('/ GET:200 Returns all of the articles, including a \n\t comment count', () => {
         return request(app)
           .get('/api/articles/')
@@ -281,7 +297,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid ID provided');
           });
       });
-      it.only('/:comment_id PATCH:400 Returns \'Number of votes \n\t to add not passed\' when sent property other than inc_votes', () => {
+      it('/:comment_id PATCH:400 Returns \'Number of votes \n\t to add not passed\' when sent property other than inc_votes', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({ name: 'Jordan' })
@@ -290,7 +306,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Number of votes to add not passed');
           });
       });
-      it.only('/:comment_id PATCH:400 Responds with \'Invalid properties in \n\t request\' when passed invalid properties', () => {
+      it('/:comment_id PATCH:400 Responds with \'Invalid properties in \n\t request\' when passed invalid properties', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({ inc_votes: 408, name: 'Jordan' })
@@ -299,7 +315,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid properties in request')
           });
       });
-      it.only('/:comment_id PATCH:400 Responds with \'Invalid number \n\t of votes to add\' when passed inc_votes datatype != number', () => {
+      it('/:comment_id PATCH:400 Responds with \'Invalid number \n\t of votes to add\' when passed inc_votes datatype != number', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({ inc_votes: 'Jordan' })
@@ -308,7 +324,7 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Invalid number of votes to add')
           })
       })
-      it.only('/:comment_id DELETE:200 Should delete the given comment \n\t  and respond with no content.', () => {
+      it('/:comment_id DELETE:200 Should delete the given comment \n\t  and respond with no content.', () => {
         return request(app)
           .delete('/api/comments/1')
           .expect(204)

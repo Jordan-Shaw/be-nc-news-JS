@@ -36,7 +36,9 @@ exports.patchArticle = (req, res, next) => {
 exports.getComments = (req, res, next) => {
   // console.log('Made it to getArticleComments')
   const { article_id } = req.params;
-  fetchComments(article_id)
+  const { query } = req;
+
+  fetchComments(article_id, query)
     .then(comments => {
       res.status(200).send(comments);
     })

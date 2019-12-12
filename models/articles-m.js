@@ -45,11 +45,13 @@ exports.updateArticle = (article_id, updateData) => {
     })
 }
 
-exports.fetchComments = (article_id) => {
+exports.fetchComments = (article_id, queries) => {
   // console.log('Made it to  fetchArticleComments');
+  const sort_by = queries.sort_by.split(':');
   return knextion('comments')
     .where('article_id', '=', article_id)
     .select('author', 'body', 'comment_id', 'created_at', 'votes')
+    .orderBy(sort_by[0] || 'comment_id', sort_by[1] || 'asc')
     .then(comments => {
       // console.log(comments);
       comments = { comments: comments };
