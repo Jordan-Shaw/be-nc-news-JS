@@ -1,7 +1,6 @@
 const knextion = require('../db/connection.js')
 
 exports.fetchArticle = (article_id) => {
-  // console.log('Made it to fetchArticle...')
   return knextion('articles')
     .select('*')
     .where('article_id', '=', article_id)
@@ -12,12 +11,9 @@ exports.fetchArticle = (article_id) => {
       }
       return article;
     })
-  // .catch((err) =>
-  //   console.log(err))
 }
 
 exports.updateArticle = (article_id, updateData) => {
-  // console.log('Made it to the updateArticle model...')
   const { inc_votes } = updateData
 
   if (Object.keys(updateData).length > 1) {
@@ -46,7 +42,6 @@ exports.updateArticle = (article_id, updateData) => {
 }
 
 exports.fetchComments = (article_id, sort_by) => {
-  // console.log('Made it to  fetchArticleComments');
   if (!sort_by) {
     sort_by = 'comment_id:asc'
   }
@@ -58,7 +53,6 @@ exports.fetchComments = (article_id, sort_by) => {
     .select('author', 'body', 'comment_id', 'created_at', 'votes')
     .orderBy(sortParams[0], sortParams[1])
     .then(comments => {
-      // console.log(comments);
       comments = { comments: comments };
       if (comments.comments.length === 0) {
         return knextion('articles')
@@ -75,7 +69,6 @@ exports.fetchComments = (article_id, sort_by) => {
 }
 
 exports.addComment = (article_id, comment) => {
-  // console.log('Made it to addComment')
   if (!comment.username) {
     return Promise.reject({ status: 400, msg: "No username provided" })
   } else if (!comment.body) {
@@ -105,6 +98,9 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
   }
   if (!order) {
     order = "asc";
+  }
+  if (order !== "asc" && order !== "desc") {
+    return Promise.reject({ status: 400, msg: `Cannot order by ${order} - order must be asc or desc` })
   }
 
   return knextion

@@ -288,14 +288,31 @@ describe('app', () => {
             expect(response.body.articles.length).to.equal(1);
           });
       });
-      it('/api/articles?sort_by=puppies GET:400 Responds with \n\t \'Cannot sort by ${Column} - ${Column} column does not exist\'', () => {
+      it('/api/articles?sort_by=puppies GET:400 Responds with \n\t \'Cannot sort by ${query} - ${query} column does not exist\'', () => {
         return request(app)
           .get('/api/articles?sort_by=puppies')
           .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal('Cannot sort by puppies - puppies column does not exist');
-          })
-      })
+          });
+      });
+      it('/api/articles?order=puppies GET:400 Responds with \n\t \'Cannot order by ${query} - order must be asc or desc\'', () => {
+        return request(app)
+          .get('/api/articles?order=puppies')
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Cannot order by puppies - order must be asc or desc');
+          });
+      });
+      xit('/api/articles?author=puppies GET:400 Responds with \n\t \'Author/topic ${query} is not in the database\'', () => {
+        return request(app)
+          .get('/api/articles?author=puppies')
+          .expect(400)
+          .then(response => {
+            console.log(response.body);
+            expect(response.body.msg).to.equal('Author puppies is not in the database');
+          });
+      });
     });
     describe('/comments', () => {
       it('/:comment_id PATCH:200 Successfully adds passed \n\t number of votes to \'votes\' property and returns the \n\t modified comment', () => {

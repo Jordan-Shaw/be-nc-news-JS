@@ -2,7 +2,6 @@ const { fetchArticle, updateArticle, fetchComments, addComment, fetchArticles } 
 const errorDetailSlicer = require('../db/utils/utils.js')
 
 exports.getArticle = (req, res, next) => {
-  // console.log('Made it to getArticle...');
   const { article_id } = req.params;
 
   fetchArticle(article_id)
@@ -20,7 +19,6 @@ exports.getArticle = (req, res, next) => {
 }
 
 exports.patchArticle = (req, res, next) => {
-  // console.log("Made it to the patchArticle controller")
   const { article_id } = req.params;
   const updateData = req.body;
 
@@ -34,7 +32,6 @@ exports.patchArticle = (req, res, next) => {
 }
 
 exports.getComments = (req, res, next) => {
-  // console.log('Made it to getArticleComments')
   const { article_id } = req.params;
   const { sort_by } = req.query;
 
@@ -48,7 +45,6 @@ exports.getComments = (req, res, next) => {
 }
 
 exports.postComment = (req, res, next) => {
-  // console.log('Made it to postComment');
   const { article_id } = req.params;
   const comment = req.body;
 
@@ -68,7 +64,6 @@ exports.postComment = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-  // console.log('Made it to getArticles');
   const { query } = req;
   fetchArticles(query)
     .then(response => {

@@ -11,8 +11,6 @@ app.use('/api', apiRouter);
 
 // generic error handler
 app.use((err, req, res, next) => {
-  // console.log(req.query);
-  // console.log(err);
   if (!err.status) {
     next(err)
   }
@@ -21,7 +19,6 @@ app.use((err, req, res, next) => {
 
 // PSQL error handler
 app.use((err, req, res, next) => {
-  // console.log(err);
   const psqlErrors = {
     "22P02": "Invalid ID provided",
     "23503": {
