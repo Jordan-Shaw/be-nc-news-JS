@@ -486,6 +486,15 @@ describe('app', () => {
           });
       });
     });
+    xdescribe('/api', () => {
+      it('GET:200 reads the JSON file', () => {
+        return request(app)
+          .get('/api/')
+          .expect(200)
+          .then(response =>
+            expect(typeof response.body).to.be.a('String'))
+      });
+    });
   });
 });
 
