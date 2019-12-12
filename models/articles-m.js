@@ -152,7 +152,7 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
         .where('slug', '=', topic)
         .then(response => {
           if (response.length === 0) {
-            return Promise.reject({ status: 400, msg: `topic ${topic} is not in the database` })
+            return Promise.reject({ status: 400, msg: `Topic ${topic} is not in the database` })
           } else { return true; }
         })
     }
@@ -160,9 +160,6 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
   const topicPromise = extantTopic(topic)
 
   return Promise.all([getTheArticles, authorPromise, topicPromise]).then(([getTheArticles, extantAuthor, extantTopic]) => {
-    // console.log(1, getTheArticles);
-    // console.log(2, extantAuthor);
-    // console.log(3, extantTopic);
     if (extantAuthor === true && extantTopic === true) {
       return getTheArticles;
     }

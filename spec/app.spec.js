@@ -304,12 +304,20 @@ describe('app', () => {
             expect(response.body.msg).to.equal('Cannot order by puppies - order must be asc or desc');
           });
       });
-      it('/api/articles?author=puppies GET:400 Responds with \n\t \'Author/topic ${query} is not in the database\'', () => {
+      it('/api/articles?author=puppies GET:400 Responds with \n\t \'Author ${query} is not in the database\'', () => {
         return request(app)
           .get('/api/articles?author=puppies')
           .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal('Author puppies is not in the database');
+          });
+      });
+      it('/api/articles?topic=puppies GET:400 Responds with \n\t \'Topic ${query} is not in the database\'', () => {
+        return request(app)
+          .get('/api/articles?topic=puppies')
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal('Topic puppies is not in the database');
           });
       });
     });
