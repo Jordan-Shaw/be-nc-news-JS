@@ -120,7 +120,6 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
       if (topic) {
         query.where({ topic });
       }
-      // two if statements here do the same thing, where statements just written differently 
     })
     .returning(['author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'comment_count'])
     .then(response => {
@@ -170,26 +169,4 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
       return getTheArticles;
     }
   })
-
-  // return knextion
-  //   .select('articles.*')
-  //   .from('articles')
-  //   .orderBy(sort_by, order)
-  //   .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
-  //   .count('comment_id', { as: 'comment_count' })
-  //   .groupBy('articles.article_id')
-  //   .modify((query) => {
-  //     if (author) {
-  //       query.where('articles.author', '=', author)
-  //     }
-  //     if (topic) {
-  //       query.where({ topic });
-  //     }
-  //     // two if statements here do the same thing, where statements just written differently 
-  //   })
-  //   .then(response => {
-  //     response = { articles: response };
-  //     return response;
-  //   });
-
 }

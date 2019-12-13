@@ -1,11 +1,10 @@
-# News App API
+# News App - Express API
 
 ## Background
 
-This project aimed to construct a backend for a news website. The RESTful API serves data from a PSQL database, with the interaction being performed using [Knex](https://knexjs.org). 
+This project consisted of constructing a backend for a news website. Using express, the API serves data from a PSQL database with interaction being handled by [Knex](https://knexjs.org). 
 
-## Getting Started
-### Step 1 - Setting up your own repository
+## Prerequisites
 
 Fork this repo and clone it onto your machine.
 
@@ -15,24 +14,22 @@ git clone https://github.com/${username}/be-nc-news-JS.git
 cd be-nc-news-JS
 ```
 
-On GitHub create your own **public** repository for your project. **Make sure NOT to initialise it with a README or .gitignore.**
-
-Next, you should hook your local version up to the newly created GitHub repo. Use the following terminal commands, making sure to check the git remotes with each step (`git remote -v`):
+This project requires [npm](https://www.npmjs.com/get-npm) and [PostgreSQL](https://www.postgresql.org/) to run. Install if necessary and then run the following command in your terminal: 
 
 ```bash
-git remote remove origin
-
-# This will prevent you from pushing to the original Northcoders' repo.
+npm install
 ```
+This will install the project's dependencies, i.e:
+ - [express](https://expressjs.com/)
+ - [knex](http://knexjs.org/)
+ - [node-postgres](https://www.npmjs.com/package/pg)
+ - [mocha](https://mochajs.org/)
+ - [chai](https://www.chaijs.com/)
+  - [supertest](https://www.npmjs.com/package/supertest)
 
-```bash
-git remote add origin <YOUR-GITHUB-URL>
+### Config set-
 
-# This will add your GitHub location to your local git repository.
-# You can confirm this by checking the new git remote.
-```
-
-## Step 2 - Setting up your project
+## Running the tests
 
 In this repo we have provided you with the knexfile. Make sure to add it to the `.gitignore` once you start pushing to your own repository. If you are on linux insert your postgres username and password into the knexfile.
 
