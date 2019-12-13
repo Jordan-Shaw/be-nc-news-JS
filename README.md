@@ -1,21 +1,18 @@
-# Northcoders News API
-
-**You can clone this repository but do not fork it**
+# News App API
 
 ## Background
 
-We will be building the API to use in the Northcoders News Sprint during the Front End block of the course.
+This project aimed to construct a backend for a news website. The RESTful API serves data from a PSQL database, with the interaction being performed using [Knex](https://knexjs.org). 
 
-Your database will be PSQL, and you will interact with it using [Knex](https://knexjs.org).
+## Getting Started
+### Step 1 - Setting up your own repository
 
-## Step 1 - Setting up your own repository
-
-Clone this repo:
+Fork this repo and clone it onto your machine.
 
 ```bash
-git clone https://github.com/northcoders/be-nc-news
+git clone https://github.com/${username}/be-nc-news-JS.git
 
-cd be-nc-news
+cd be-nc-news-JS
 ```
 
 On GitHub create your own **public** repository for your project. **Make sure NOT to initialise it with a README or .gitignore.**

@@ -107,7 +107,7 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
     return Promise.reject({ status: 400, msg: `Cannot order by ${order} - order must be asc or desc` })
   }
   const getTheArticles = knextion
-    .select('articles.*')
+    .select('articles.author', 'articles.title', 'articles.article_id', 'articles.topic', 'articles.created_at', 'articles.votes')
     .from('articles')
     .orderBy(sort_by, order)
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
@@ -121,7 +121,9 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
         query.where({ topic });
       }
       // two if statements here do the same thing, where statements just written differently 
-    }).then(response => {
+    })
+    .returning(['author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'comment_count'])
+    .then(response => {
       response = { articles: response };
       return response;
     });

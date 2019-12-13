@@ -258,7 +258,7 @@ describe('app', () => {
             expect(response.body.comments[0].author).to.equal('butter_bridge')
           });
       });
-      it('/:article_id/comments GET:200 Returns all of the articles, \n\t including a comment count', () => {
+      it('/articles/ GET:200 Returns all of the articles, \n\t including a comment count', () => {
         return request(app)
           .get('/api/articles/')
           .expect(200)
@@ -267,7 +267,7 @@ describe('app', () => {
             expect(response.body.articles).to.be.an('Array');
             const { articles } = response.body;
             expect(articles[0]).to.be.an('Object');
-            expect(articles[0]).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count');
+            expect(articles[0]).to.have.keys('article_id', 'title', 'votes', 'topic', 'author', 'created_at', 'comment_count');
           });
       });
       // it.only('/:article_id/comments GET:200 Responds with \n\t \'Invalid query\' when passed an invalid query', () => {
@@ -483,6 +483,14 @@ describe('app', () => {
           .expect(405)
           .then(response => {
             expect(response.body.msg).to.equal("Method Not Found");
+          });
+      });
+      it('/:comment_id GET:200 Returns comments \n\t sorted by votes', () => {
+        return request(app)
+          .get('/api/comments?sort_by=votes')
+          .expect(200)
+          .then(response => {
+            expect(response.body.comments[0].votes).to.equal(100);
           });
       });
     });
