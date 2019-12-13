@@ -62,5 +62,81 @@
         "created_at": 1527695953341
       }
     }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "Serves an array containing the comments for the given article.",
+    "exampleResponse": {
+      "comments": [
+        {
+          "author": "weegembump",
+          "body": "Text from the comment..",
+          "comment_id": 1,
+          "created_at": 1527695953341,
+          "votes": 50
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "Posts a comment to the given article. Must be provided an object with 'username' and 'body' properties",
+    "send": {
+      "username": "exampleUsername",
+      "body": "Body of comment"
+    },
+    "exampleResponse": {
+      "comments": [
+        {
+          "author": "weegembump",
+          "body": "Text from the comment..",
+          "comment_id": 1,
+          "created_at": 1527695953341,
+          "votes": 50
+        }
+      ]
+    }
+  },
+  "GET /api/comments": {
+    "description": "serves an array of all comments",
+    "queries": [
+      "sort_by",
+      "order"
+    ],
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341
+        }
+      ]
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "Increments the votes property on the given comment before serving it. Must be sent with an object as described in 'send'. inc_votes will default to 0 if not provided.",
+    "send": {
+      "inc_votes": 1
+    },
+    "exampleResponse": {
+      "comment": {
+        "author": "weegembump",
+        "body": "Text from the comment..",
+        "comment_id": 1,
+        "created_at": 1527695953341,
+        "votes": 51
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "Deletes the given comment, with nothing being served in response"
+  },
+  "GET /users/:user_id": {
+    "description": "Serves an object containing the given user",
+    "exampleResponse": {
+      "username": "username",
+      "avatar_url": "https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg",
+      "name": "Example Name"
+    }
   }
 }
