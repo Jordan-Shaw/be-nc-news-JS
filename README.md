@@ -1,12 +1,14 @@
-# News App - Express API
+# NC News
 
 ## Background
 
-This project consisted of constructing a backend for a news website. Using express, the API serves data from a PSQL database with interaction being handled by [Knex](https://knexjs.org). 
+This project is a Node.js Express application using a RESTful API to serve data from a PSQL database, with interaction being handled by [Knex](https://knexjs.org). 
+
+A hosted version of this project can be found [here](https://nc-news-js.herokuapp.com/api/)
 
 ## Prerequisites
 
-Fork this repo and clone it onto your machine.
+1. Fork this repo and clone it onto your machine.
 
 ```bash
 git clone https://github.com/${username}/be-nc-news-JS.git
@@ -14,20 +16,78 @@ git clone https://github.com/${username}/be-nc-news-JS.git
 cd be-nc-news-JS
 ```
 
-This project requires [npm](https://www.npmjs.com/get-npm) and [PostgreSQL](https://www.postgresql.org/) to run. Install if necessary and then run the following command in your terminal: 
+
+
+2. This project requires [npm](https://www.npmjs.com/get-npm),  [PostgreSQL](https://www.postgresql.org/), and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) to run. Install if necessary and then run the following command in your terminal to install the project's dependencies: 
 
 ```bash
 npm install
 ```
-This will install the project's dependencies, i.e:
- - [express](https://expressjs.com/)
- - [knex](http://knexjs.org/)
- - [node-postgres](https://www.npmjs.com/package/pg)
- - [mocha](https://mochajs.org/)
- - [chai](https://www.chaijs.com/)
-  - [supertest](https://www.npmjs.com/package/supertest)
 
-### Config set-
+3. Create a knexfile.js in the root directory using the following code:
+```js
+const { DB_URL } = process.env;
+
+const ENV = process.env.NODE_ENV || 'development';
+
+const baseConfig = {
+  client: 'pg',
+  migrations: {
+    directory: './db/migrations'
+  },
+  seeds: {
+    directory: './db/seeds'
+  }
+};
+
+const customConfig = {
+  development: {
+    connection: {
+      database: 'nc_news'
+      // if using Linux, enter your username and password here"
+      // username: 'yourUsername'
+      // password: 'yourPassword'
+    }
+  },
+  test: {
+    connection: {
+      database: 'nc_news_test'
+      // if using Linux, enter your username and password here"
+      // username: 'yourUsername'
+      // password: 'yourPassword'
+    }
+  },
+  production: {
+    connection: `${DB_URL}?ssl=true`,
+  },
+};
+
+module.exports = { ...customConfig[ENV], ...baseConfig };
+```
+
+4. Make sure everything is functioning correctly:
+```bash
+# Setup the test database and seed it with test data:
+
+npm run seed-test 
+
+# Run the tests
+
+npm test
+```
+
+5. Setup the dev database and seed with data
+```bash
+npm run seed
+```
+
+6. Now the server can be ran locally. To do this, use the following command:
+
+```bash
+npm start
+```
+
+The server is now listening for requests on port 9090.
 
 ## Running the tests
 
