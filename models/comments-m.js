@@ -44,7 +44,6 @@ exports.removeComment = (comment_id) => {
 }
 
 exports.fetchAllComments = ({ sort_by, order }) => {
-  console.log(sort_by);
   if (!sort_by) {
     sort_by = 'created_at';
   }

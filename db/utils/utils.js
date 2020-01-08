@@ -7,8 +7,6 @@ exports.formatDates = list => {
   outputArr.forEach(article => {
     article['created_at'] = new Date(article['created_at']);
   });
-  // console.log(outputArr);
-  // console.log(typeof (outputArr));
   return outputArr;
 };
 

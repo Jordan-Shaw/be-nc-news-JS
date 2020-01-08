@@ -270,15 +270,6 @@ describe('app', () => {
             expect(articles[0]).to.have.keys('article_id', 'title', 'votes', 'topic', 'author', 'created_at', 'comment_count');
           });
       });
-      // it.only('/:article_id/comments GET:200 Responds with \n\t \'Invalid query\' when passed an invalid query', () => {
-      //   return request(app)
-      //     .get('/api/articles/5/comments?author=butter_bridge')
-      //     .expect(400)
-      //     .then(response => {
-      //       console.log(response.body);
-      //       expect(response.body.msg).to.equal('Invalid query')
-      //     })
-      // })
       it('/api/articles?author= GET:200 Should accept an author query', () => {
         return request(app)
           .get('/api/articles?author=butter_bridge')
