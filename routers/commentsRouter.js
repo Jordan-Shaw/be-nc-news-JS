@@ -1,6 +1,6 @@
 const commentsRouter = require('express').Router();
 const { patchComment, deleteComment, getAllComments: getAllComments } = require('../controllers/comments-c.js');
-const { send405 } = require('../db/utils/utils.js');
+const { send405 } = require('./utils-r');
 
 commentsRouter.route('/:comment_id')
   .patch(patchComment)

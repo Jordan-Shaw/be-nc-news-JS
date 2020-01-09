@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const apiRouter = require('./routers/apiRouter.js')
-const { errorHandler } = require('./db/utils/utils.js')
+const apiRouter = require('./routers/apiRouter')
+const { errorHandler } = require('./errorHandling')
 
 
 app.use(express.json());

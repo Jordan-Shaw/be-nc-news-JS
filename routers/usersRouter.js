@@ -1,6 +1,6 @@
 const usersRouter = require('express').Router();
 const { getUser } = require('../controllers/users-c.js');
-const { send405 } = require('../db/utils/utils.js');
+const { send405 } = require('./utils-r');
 
 
 usersRouter.route('/:username')

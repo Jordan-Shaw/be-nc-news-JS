@@ -1,6 +1,6 @@
 const articlesRouter = require('express').Router();
 const { getArticle, patchArticle, getComments, postComment, getArticles } = require('../controllers/articles-c.js')
-const { send405 } = require('../db/utils/utils.js')
+const { send405 } = require('./utils-r')
 
 
 articlesRouter.route('/')

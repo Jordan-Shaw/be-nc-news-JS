@@ -4,7 +4,7 @@ const usersRouter = require('./usersRouter.js');
 const articlesRouter = require('./articlesRouter.js');
 const commentsRouter = require('./commentsRouter.js')
 const { getAPI } = require('../controllers/api-c.js')
-const { send405 } = require('../db/utils/utils.js')
+const { send405 } = require('./utils-r')
 
 apiRouter.use('/topics', topicsRouter);
 apiRouter.use('/users', usersRouter);
