@@ -4,8 +4,7 @@ const usersRouter = require('./usersRouter.js');
 const articlesRouter = require('./articlesRouter.js');
 const commentsRouter = require('./commentsRouter.js')
 const { getAPI } = require('../controllers/api-c.js')
-
-
+const { send405 } = require('../db/utils/utils.js')
 
 apiRouter.use('/topics', topicsRouter);
 apiRouter.use('/users', usersRouter);
@@ -13,8 +12,6 @@ apiRouter.use('/articles', articlesRouter);
 apiRouter.use('/comments', commentsRouter);
 apiRouter.route('/')
   .get(getAPI)
-  .all((req, res, next) => {
-    res.status(405).send({ msg: "Method Not Found" })
-  });
+  .all(send405);
 
 module.exports = apiRouter;

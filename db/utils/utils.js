@@ -60,3 +60,7 @@ const complexErrorHandler = (err, req, res, next) => {
     res.status(400).send({ msg: psqlErrors[err.code] })
   }
 }
+
+exports.send405 = (req, res, next) => {
+  res.status(405).send({ msg: "Method Not Found" })
+}

@@ -1,14 +1,12 @@
 const usersRouter = require('express').Router();
-const { getUser } = require('../controllers/users-c.js')
+const { getUser } = require('../controllers/users-c.js');
+const { send405 } = require('../db/utils/utils.js');
+
 
 usersRouter.route('/:username')
   .get(getUser)
-  .all((req, res, next) => {
-    res.status(405).send({ msg: "Method Not Found" })
-  })
+  .all(send405);
 
-usersRouter.all('/', (req, res, next) => {
-  res.status(405).send({ msg: "Method Not Found" })
-})
+usersRouter.all('/', send405)
 
 module.exports = usersRouter;

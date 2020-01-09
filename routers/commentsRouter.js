@@ -1,18 +1,15 @@
 const commentsRouter = require('express').Router();
-const { patchComment, deleteComment, getAllComments: getAllComments } = require('../controllers/comments-c.js')
+const { patchComment, deleteComment, getAllComments: getAllComments } = require('../controllers/comments-c.js');
+const { send405 } = require('../db/utils/utils.js');
 
 commentsRouter.route('/:comment_id')
   .patch(patchComment)
   .delete(deleteComment)
-  .all((req, res, next) => {
-    res.status(405).send({ msg: "Method Not Found" })
-  })
+  .all(send405)
 
 
 commentsRouter.route('/')
   .get(getAllComments)
-  .all((req, res, next) => {
-    res.status(405).send({ msg: "Method Not Found" })
-  });
+  .all(send405);
 
 module.exports = commentsRouter;
