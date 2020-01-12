@@ -3,7 +3,6 @@ const {
   formatDates,
   makeRefObj,
   formatComments,
-  errorDetialSlicer
 } = require('../db/utils/utils');
 
 let articleData = require('../db/data/test-data/articles.js');

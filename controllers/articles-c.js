@@ -1,5 +1,5 @@
 const { fetchArticle, updateArticle, fetchComments, addComment, fetchArticles } = require('../models/articles-m.js')
-const errorDetailSlicer = require('../db/utils/utils.js')
+
 
 exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
@@ -9,12 +9,7 @@ exports.getArticle = (req, res, next) => {
       res.status(200).send(article);
     })
     .catch(err => {
-      if (!err.detail) {
-        next(err)
-      } else {
-        errorDetailSlicer(err);
-        next(err);
-      }
+      next(err)
     });
 }
 

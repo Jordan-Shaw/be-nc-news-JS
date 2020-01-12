@@ -1,4 +1,5 @@
 const knextion = require('../db/connection.js')
+const { checkTopic, checkAuthor } = require('../db/utils/utils.js')
 
 exports.fetchArticle = (article_id) => {
   return knextion
@@ -127,45 +128,11 @@ exports.fetchArticles = ({ sort_by, order, author, topic }) => {
       return response;
     });
 
-  const extantAuthor = (author) => {
-    if (!author) {
-      return true
-    } else {
-      return knextion
-        .select('*')
-        .from('users')
-        .where('username', '=', author)
-        .then(response => {
-          if (response.length === 0) {
-            return Promise.reject({ status: 404, msg: `Author ${author} is not in the database` })
-          } else {
-            return true;
-          }
-        })
-    }
-  }
+  const authorPromise = checkAuthor(author);
+  const topicPromise = checkTopic(topic)
 
-  const authorPromise = extantAuthor(author);
-
-  const extantTopic = (topic) => {
-    if (!topic) {
-      return true
-    } else {
-      return knextion
-        .select('*')
-        .from('topics')
-        .where('slug', '=', topic)
-        .then(response => {
-          if (response.length === 0) {
-            return Promise.reject({ status: 404, msg: `Topic ${topic} is not in the database` })
-          } else { return true; }
-        })
-    }
-  }
-  const topicPromise = extantTopic(topic)
-
-  return Promise.all([getTheArticles, authorPromise, topicPromise]).then(([getTheArticles, extantAuthor, extantTopic]) => {
-    if (extantAuthor === true && extantTopic === true) {
+  return Promise.all([getTheArticles, authorPromise, topicPromise]).then(([getTheArticles, checkAuthor, checkTopic]) => {
+    if (checkAuthor && checkTopic) {
       return getTheArticles;
     }
   })
