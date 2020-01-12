@@ -1,15 +1,9 @@
 const knextion = require('../connection.js')
 
 exports.formatDates = list => {
-  const copiedArr = [...list];
-  const outputArr = [];
-
-  copiedArr.forEach(article => outputArr.push({ ...article }))
-
-  outputArr.forEach(article => {
-    article['created_at'] = new Date(article['created_at']);
-  });
-  return outputArr;
+  return list.map(article => {
+    return { ...article, created_at: new Date(article['created_at']) }
+  })
 };
 
 exports.makeRefObj = list => {
@@ -23,20 +17,10 @@ exports.makeRefObj = list => {
 };
 
 exports.formatComments = (comments, articleRef) => {
-  const copy = [...comments];
-  const editedComments = []
-
-  copy.forEach(comment => editedComments.push({ ...comment }));
-
-  editedComments.forEach(comment => {
-    comment.author = comment.created_by;
-    delete comment.created_by;
-    comment.article_id = comment.belongs_to;
-    delete comment.belongs_to;
-    comment.created_at = new Date(comment.created_at);
-    comment.article_id = articleRef[comment.article_id];
+  return comments.map(comment => {
+    return { body: comment.body, author: comment.created_by, votes: comment.votes, created_at: new Date(comment.created_at), article_id: articleRef[comment.belongs_to] };
   })
-  return editedComments;
+
 };
 
 exports.checkTopic = (topic) => {
