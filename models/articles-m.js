@@ -82,12 +82,11 @@ exports.addComment = (article_id, comment) => {
     return Promise.reject({ status: 400, msg: "Invalid properties provided" })
   }
 
-  comment.article_id = article_id;
-  comment.author = comment.username;
-  delete comment.username;
+  const formattedComment = { body: comment.body, article_id: article_id, author: comment.username }
+
 
   return knextion
-    .insert(comment)
+    .insert(formattedComment)
     .into('comments')
     .returning(['author', 'body', 'comment_id', 'created_at', 'votes'])
     .then(comment => {
