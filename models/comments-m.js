@@ -48,7 +48,7 @@ exports.fetchAllComments = ({ sort_by, order }) => {
     sort_by = 'created_at';
   }
   if (!order) {
-    order = "desc";
+    order = "asc";
   }
   if (order !== "asc" && order !== "desc") {
     return Promise.reject({ status: 400, msg: `Cannot order by ${order} - order must be asc or desc` })

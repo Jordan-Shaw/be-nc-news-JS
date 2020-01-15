@@ -84,7 +84,6 @@ exports.addComment = (article_id, comment) => {
 
   const formattedComment = { body: comment.body, article_id: article_id, author: comment.username }
 
-
   return knextion
     .insert(formattedComment)
     .into('comments')
