@@ -56,7 +56,7 @@ exports.fetchAllComments = ({ sort_by, order }) => {
   return knextion
     .select('*')
     .from('comments')
-    .orderBy(sort_by, 'asc')
+    .orderBy(sort_by, order)
     .returning('*')
     .then(response => {
       return { comments: response }
