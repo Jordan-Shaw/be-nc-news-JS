@@ -6,6 +6,8 @@ This project is a Node.js Express application using a RESTful API to serve data 
 
 A hosted version of this project can be found [here](https://nc-news-js.herokuapp.com/api/)
 
+The Frontend repo for this project can be found [here](https://github.com/Jordan-Shaw/REACT-NC-News)
+
 ## Getting Started
 ### Prerequisites
 This project requires [npm](https://www.npmjs.com/get-npm)(v6.13.12 or newer), [PostgreSQL](https://www.postgresql.org/) (v10.10 or newer), and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (v2.17.1 or newer) to run. Install if necessary.
